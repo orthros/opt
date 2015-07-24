@@ -6,3 +6,8 @@ dictionary.
 
 Applications for this can be as simple as a console utility to a simulator that
 needs a static set of options to influence the decision tree.
+
+To Do:
+- [x] Add Simple Unit Tests
+- [ ] Add more robust Unit Tests
+- [ ] Add Comment documentation to the code
