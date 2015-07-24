@@ -28,7 +28,7 @@ namespace Opt.Options
             {
                 if (keysAndValues.ContainsKey(val.Attribute.Name))
                 {
-                    var stringVal = keysAndValues[val.Property.Name];
+                    var stringVal = keysAndValues[val.Attribute.Name];
                     var boolVal = Utils.parseYesNoTrueFalse(stringVal, val.Attribute.DefaultValue);
                     val.Property.SetValue(this, boolVal, null);
                 }
@@ -53,7 +53,7 @@ namespace Opt.Options
             {
                 if (keysAndValues.ContainsKey(val.Attribute.Name))
                 {
-                    var stringValue = keysAndValues[val.Property.Name];
+                    var stringValue = keysAndValues[val.Attribute.Name];
                     var enumVal = Enum.Parse(val.Attribute.EnumType, stringValue);
                     val.Property.SetValue(this, enumVal, null);
                 }
@@ -80,7 +80,7 @@ namespace Opt.Options
             {
                 if (keysAndValues.ContainsKey(val.Attribute.Name))
                 {
-                    var stringVal = keysAndValues[val.Property.Name];
+                    var stringVal = keysAndValues[val.Attribute.Name];
                     val.Property.SetValue(this, stringVal, null);
                 }
                 else
