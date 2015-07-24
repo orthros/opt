@@ -1,5 +1,5 @@
 # opt
-An example class to hold onto "global" options for a C# application
+An example module to hold onto "global" options for a C# application
 
 This uses C# attributes and reflection to mark properties as options to be
 added from a passed dictionary.
