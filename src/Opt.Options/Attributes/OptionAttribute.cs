@@ -2,13 +2,25 @@
 
 namespace Opt.Options.Attributes
 {
+    /// <summary>
+    /// Base Class for an OptionAttribute
+    /// Has a Name property to use in reflecting out the OptionName
+    /// </summary>
     public abstract class OptionAttribute : Attribute
     {
-        public string Name { get; private set; }
+        /// <summary>
+        /// The Key to be used when finding the value
+        /// </summary>
+        public string OptionName { get; private set; }
 
+        /// <summary>
+        /// Default constructor for an OptionAttribute
+        /// </summary>
+        /// <param name="name">Sets the OptionName</param>
         public OptionAttribute(string name)
+            : base()
         {
-            this.Name = name;
+            this.OptionName = name;
         }
     }
 }

@@ -6,17 +6,37 @@ using System.Linq;
 
 namespace Opt.Options
 {
+    /// <summary>
+    /// Base class to handle various options
+    /// Uses Reflection and <see cref="OptionAttribute"/> to automatically
+    /// set properties in the option set
+    /// </summary>
     public abstract class OptionSet
     {
+        /// <summary>
+        /// Provides logging functionality
+        /// </summary>
         protected ILog Logger{get; private set;}
         
+        /// <summary>
+        /// Constructor for the OptionSet
+        /// Parses the Options out of the dictionary
+        /// </summary>
+        /// <param name="log">The log for the OptionSet to use</param>
+        /// <param name="keyValues">The set of Options represented as strings</param>
         public OptionSet(ILog log, Dictionary<string,string> keyValues)
         {
             this.Logger = log;
             InitializeProperties(keyValues);
         }
 
-        private void InitializeProperties(Dictionary<string,string> keysAndValues)
+        /// <summary>
+        /// Initializes the Properties on the OptionSet object using reflection and <see cref="OptionAttribute"/>
+        /// Will log occurances of unknown or unset options.
+        /// Uses the <see cref="OptionAttribute"/>'s Name property as a key in <paramref name="keyValues"/> Dictionary
+        /// </summary>
+        /// <param name="keyValues">The Keys and Values of the Options</param>
+        private void InitializeProperties(Dictionary<string,string> keyValues)
         {
             #region Bools
             var boolPropertiesThatAreOptions = from p in this.GetType().GetProperties()
@@ -26,9 +46,9 @@ namespace Opt.Options
 
             foreach (var val in boolPropertiesThatAreOptions)
             {
-                if (keysAndValues.ContainsKey(val.Attribute.Name))
+                if (keyValues.ContainsKey(val.Attribute.OptionName))
                 {
-                    var stringVal = keysAndValues[val.Attribute.Name];
+                    var stringVal = keyValues[val.Attribute.OptionName];
                     var boolVal = Utils.parseYesNoTrueFalse(stringVal, val.Attribute.DefaultValue);
                     val.Property.SetValue(this, boolVal, null);
                 }
@@ -51,9 +71,9 @@ namespace Opt.Options
 
             foreach (var val in enumPropertiesThatAreOptions)
             {
-                if (keysAndValues.ContainsKey(val.Attribute.Name))
+                if (keyValues.ContainsKey(val.Attribute.OptionName))
                 {
-                    var stringValue = keysAndValues[val.Attribute.Name];
+                    var stringValue = keyValues[val.Attribute.OptionName];
                     var enumVal = Enum.Parse(val.Attribute.EnumType, stringValue);
                     val.Property.SetValue(this, enumVal, null);
                 }
@@ -78,9 +98,9 @@ namespace Opt.Options
 
             foreach (var val in stringPropertiesThatAreOptions)
             {
-                if (keysAndValues.ContainsKey(val.Attribute.Name))
+                if (keyValues.ContainsKey(val.Attribute.OptionName))
                 {
-                    var stringVal = keysAndValues[val.Attribute.Name];
+                    var stringVal = keyValues[val.Attribute.OptionName];
                     val.Property.SetValue(this, stringVal, null);
                 }
                 else
@@ -95,11 +115,11 @@ namespace Opt.Options
             #endregion           
  
             #region Check for unknowns
-            var unknownKVP = keysAndValues
+            var unknownKVP = keyValues
                 .Select(x => x.Key)                
-                .Except(stringPropertiesThatAreOptions.Select(x => x.Attribute.Name))
-                .Except(boolPropertiesThatAreOptions.Select(x => x.Attribute.Name))
-                .Except(enumPropertiesThatAreOptions.Select(x => x.Attribute.Name));
+                .Except(stringPropertiesThatAreOptions.Select(x => x.Attribute.OptionName))
+                .Except(boolPropertiesThatAreOptions.Select(x => x.Attribute.OptionName))
+                .Except(enumPropertiesThatAreOptions.Select(x => x.Attribute.OptionName));
 
             if(unknownKVP.Any())
             {

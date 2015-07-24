@@ -60,5 +60,5 @@ public string StringFeature1 { get; private set; }
 To Do:
 - [x] Add Simple Unit Tests
 - [ ] Add more robust Unit Tests
-- [ ] Add Comment documentation to the code
+- [x] Add Comment documentation to the code
 - [ ] Update Readme.md

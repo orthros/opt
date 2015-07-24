@@ -1,11 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
+﻿
 namespace Opt.Tests.Stubs
 {
+    /// <summary>
+    /// Very simple enumeration for use in Unit Tests
+    /// </summary>
     public enum SimpleEnum
     {
         ItemOne = 1 << 0,
