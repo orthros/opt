@@ -1,12 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Opt.Options.Attributes
 {
-    class EnumOptionAttribute : OptionAttribute
+    public class EnumOptionAttribute : OptionAttribute
     {
         public int DefaultValue { get; private set; }
         public Type EnumType { get; private set; }

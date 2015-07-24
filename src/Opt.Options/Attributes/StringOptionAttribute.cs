@@ -1,7 +1,7 @@
 ﻿
 namespace Opt.Options.Attributes
 {
-    class StringOptionAttribute : OptionAttribute
+    public class StringOptionAttribute : OptionAttribute
     {
         public string DefaultStringValue { get; private set; }
 

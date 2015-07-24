@@ -6,7 +6,7 @@ using System.Linq;
 
 namespace Opt.Options
 {
-    public class OptionSet
+    public abstract class OptionSet
     {
         protected ILog Logger{get; private set;}
         
@@ -96,10 +96,10 @@ namespace Opt.Options
  
             #region Check for unknowns
             var unknownKVP = keysAndValues
-                .Select(x => x.Key)
-                .Intersect(stringPropertiesThatAreOptions.Select(x => x.Attribute.Name))
-                .Intersect(boolPropertiesThatAreOptions.Select(x => x.Attribute.Name))
-                .Intersect(enumPropertiesThatAreOptions.Select(x => x.Attribute.Name));
+                .Select(x => x.Key)                
+                .Except(stringPropertiesThatAreOptions.Select(x => x.Attribute.Name))
+                .Except(boolPropertiesThatAreOptions.Select(x => x.Attribute.Name))
+                .Except(enumPropertiesThatAreOptions.Select(x => x.Attribute.Name));
 
             if(unknownKVP.Any())
             {
