@@ -61,4 +61,4 @@ To Do:
 - [x] Add Simple Unit Tests
 - [ ] Add more robust Unit Tests
 - [x] Add Comment documentation to the code
-- [ ] Update Readme.md
+- [x] Update Readme.md
