@@ -1,4 +1,5 @@
 ﻿using Opt.Core;
+using Opt.Options.Attributes;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,12 +19,12 @@ namespace Opt.Options
         private void InitializeProperties(Dictionary<string,string> keysAndValues)
         {
             #region Bools
-            var boolPropertiesThatAreEngineOptions = from p in this.GetType().GetProperties()
+            var boolPropertiesThatAreOptions = from p in this.GetType().GetProperties()
                                                      let attr = p.GetCustomAttributes(typeof(BoolOptionAttribute), true)
                                                      where attr.Length != 0
                                                      select new { Property = p, Attribute = attr.First() as BoolOptionAttribute };
 
-            foreach (var val in boolPropertiesThatAreEngineOptions)
+            foreach (var val in boolPropertiesThatAreOptions)
             {
                 if (keysAndValues.ContainsKey(val.Attribute.Name))
                 {
@@ -43,12 +44,12 @@ namespace Opt.Options
             #endregion
 
             #region Enums
-            var enumPropertiesThatAreEngineOptions = from p in this.GetType().GetProperties()
+            var enumPropertiesThatAreOptions = from p in this.GetType().GetProperties()
                                                      let attr = p.GetCustomAttributes(typeof(EnumOptionAttribute), true)
                                                      where attr.Length != 0
                                                      select new { Property = p, Attribute = attr.First() as EnumOptionAttribute };
 
-            foreach (var val in enumPropertiesThatAreEngineOptions)
+            foreach (var val in enumPropertiesThatAreOptions)
             {
                 if (keysAndValues.ContainsKey(val.Attribute.Name))
                 {
@@ -70,12 +71,12 @@ namespace Opt.Options
             #endregion
 
             #region Strings
-            var stringPropertiesThatAreEngineOptions = from p in this.GetType().GetProperties()
+            var stringPropertiesThatAreOptions = from p in this.GetType().GetProperties()
                                                        let attr = p.GetCustomAttributes(typeof(StringOptionAttribute), true)
                                                        where attr.Length != 0
                                                        select new { Property = p, Attribute = attr.First() as StringOptionAttribute };
 
-            foreach (var val in stringPropertiesThatAreEngineOptions)
+            foreach (var val in stringPropertiesThatAreOptions)
             {
                 if (keysAndValues.ContainsKey(val.Attribute.Name))
                 {
@@ -93,57 +94,5 @@ namespace Opt.Options
             }
             #endregion            
         }
-
-        abstract class OptionAttribute : Attribute
-        {
-            public string Name { get; private set; }
-
-            public OptionAttribute(string name)
-            {
-                this.Name = name;
-            }
-        }
-
-        class EnumOptionAttribute : OptionAttribute
-        {
-            public int DefaultValue { get; private set; }
-            public Type EnumType { get; private set; }
-
-            public EnumOptionAttribute(string name, Type enumType, int defaultvalue)
-                : base(name)
-            {
-                this.DefaultValue = defaultvalue;
-                this.EnumType = enumType;
-            }
-        }
-
-        class BoolOptionAttribute : OptionAttribute
-        {
-            public bool DefaultValue { get; private set; }
-
-            public BoolOptionAttribute(string name, bool defaultValue)
-                : base(name)
-            {
-                this.DefaultValue = defaultValue;
-            }
-
-            public BoolOptionAttribute(string name)
-                : this(name, false)
-            {
-
-            }
-        }
-
-        class StringOptionAttribute : OptionAttribute
-        {
-            public string DefaultStringValue { get; private set; }
-
-            public StringOptionAttribute(string name, string defaultValue)
-                : base(name)
-            {
-                this.DefaultStringValue = defaultValue;
-            }
-        }
-
     }
 }
