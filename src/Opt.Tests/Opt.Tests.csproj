@@ -50,10 +50,10 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="OptionsTests.cs" />
     <Compile Include="Stubs\SimpleEnum.cs" />
     <Compile Include="Stubs\SimpleOptions.cs" />
     <Compile Include="Stubs\StorageLogger.cs" />
-    <Compile Include="UnknownOptionsTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
