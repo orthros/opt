@@ -92,7 +92,22 @@ namespace Opt.Options
                     val.Property.SetValue(this, val.Attribute.DefaultStringValue, null);
                 }
             }
-            #endregion            
+            #endregion           
+ 
+            #region Check for unknowns
+            var unknownKVP = keysAndValues
+                .Select(x => x.Key)
+                .Intersect(stringPropertiesThatAreOptions.Select(x => x.Attribute.Name))
+                .Intersect(boolPropertiesThatAreOptions.Select(x => x.Attribute.Name))
+                .Intersect(enumPropertiesThatAreOptions.Select(x => x.Attribute.Name));
+
+            if(unknownKVP.Any())
+            {
+                Logger.Log("The following Options were not found:\n\t");
+                Logger.Log(string.Join("\n\t", unknownKVP));
+            }
+
+            #endregion
         }
     }
 }
