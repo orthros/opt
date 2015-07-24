@@ -1,4 +1,7 @@
-# opt
+opt
+======
+
+# About
 An example module to hold onto "global" options for a C# application
 
 This uses C# attributes and reflection to mark properties as options to be
@@ -9,6 +12,10 @@ needs a static set of options to influence the decision tree.
 
 Supported types are Bool, Enum and String
 Each Option has a "Name" field, which will be used in the dictionary lookup
+
+#Examples
+
+### Supported Types
 Each type can be declared like so:
 ```csharp
 [BoolOption("BoolOption1Name")]
@@ -21,6 +28,7 @@ public string StringFeature1 { get; private set; }
 public EnumType EnumFeature1 { get; private set; }
 
 ```
+### Default Values
 Default values can be added to each type
 ```csharp
 ///<summary>
@@ -55,8 +63,11 @@ public EnumType EnumFeature1 { get; private set; }
 public string StringFeature1 { get; private set; }
 
 ```
+# Contributing
+Pull requests are welcome!
+Please make sure they are decently formatted with some documentation.
 
-
+# Future Plans
 To Do:
 - [x] Add Simple Unit Tests
 - [ ] Add more robust Unit Tests
