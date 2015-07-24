@@ -2,7 +2,7 @@
 namespace Opt.Options.Attributes
 {
     /// <summary>
-    /// /// Attribute to decorate a Property to use a bool Option in an OptionSet
+    /// Attribute to decorate a Property to use a bool Option in an OptionSet
     /// </summary>
     public class BoolOptionAttribute : OptionAttribute
     {
