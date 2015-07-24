@@ -6,6 +6,7 @@ namespace Opt.Options.Attributes
     /// Base Class for an OptionAttribute
     /// Has a Name property to use in reflecting out the OptionName
     /// </summary>
+    [AttributeUsage(AttributeTargets.Property)]
     public abstract class OptionAttribute : Attribute
     {
         /// <summary>
