@@ -121,3 +121,4 @@ To Do:
 - [ ] Add more robust Unit Tests
 - [x] Add Comment documentation to the code
 - [x] Update Readme.md
+- [ ] Make the Class isomorphic (i.e. can create a Dictionary<string,string> of the options from the OptionSet object
