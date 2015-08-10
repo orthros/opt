@@ -16,7 +16,8 @@ namespace Opt.Options
         /// <summary>
         /// Provides logging functionality
         /// </summary>
-        protected ILog Logger{get; private set;}
+        protected ILog Logger { get; private set; }
+                
         
         /// <summary>
         /// Constructor for the OptionSet
