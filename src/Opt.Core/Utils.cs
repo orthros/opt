@@ -2,7 +2,7 @@
 namespace Opt.Core
 {
     /// <summary>
-    /// Class fo generic utilities
+    /// Class for generic utilities
     /// </summary>
     public static class Utils
     {
