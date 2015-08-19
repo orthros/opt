@@ -113,14 +113,44 @@ namespace Opt.Options
                     val.Property.SetValue(this, val.Attribute.DefaultStringValue, null);
                 }
             }
-            #endregion           
- 
+            #endregion
+
+            #region Integerss
+            var integerPropertiesThatAreOptions = from p in this.GetType().GetProperties()
+                                                    let attr = p.GetCustomAttributes(typeof(IntegerOptionAttribute), true)
+                                                    where attr.Length != 0
+                                                    select new { Property = p, Attribute = attr.First() as IntegerOptionAttribute };
+
+            foreach (var val in integerPropertiesThatAreOptions)
+            {
+                if (keyValues.ContainsKey(val.Attribute.OptionName))
+                {
+                    var stringVal = keyValues[val.Attribute.OptionName];
+                    var integerValue = val.Attribute.DefaultIntegerValue;
+                    if(!int.TryParse(stringVal, out integerValue))
+                    {
+                        integerValue = val.Attribute.DefaultIntegerValue;
+                    }
+                    val.Property.SetValue(this, integerValue, null);
+                }
+                else
+                {
+                    //Warn
+                    Logger.Log(string.Format("Could not find Option \"{0}\". Setting it to the default value \"{1}\"",
+                        val.Property.Name, val.Attribute.DefaultIntegerValue));
+                    //Set
+                    val.Property.SetValue(this, val.Attribute.DefaultIntegerValue, null);
+                }
+            }
+            #endregion
+
             #region Check for unknowns
             var unknownKVP = keyValues
-                .Select(x => x.Key)                
+                .Select(x => x.Key)
                 .Except(stringPropertiesThatAreOptions.Select(x => x.Attribute.OptionName))
                 .Except(boolPropertiesThatAreOptions.Select(x => x.Attribute.OptionName))
-                .Except(enumPropertiesThatAreOptions.Select(x => x.Attribute.OptionName));
+                .Except(enumPropertiesThatAreOptions.Select(x => x.Attribute.OptionName))
+                .Except(integerPropertiesThatAreOptions.Select(x => x.Attribute.OptionName));
 
             if(unknownKVP.Any())
             {

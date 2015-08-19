@@ -26,6 +26,11 @@ namespace Opt.Tests.Stubs
         public string SimpleStringFeature { get; private set; }
         #endregion
 
+        #region Integer Properties
+        [IntegerOption("MyInt",0)]
+        public int SimpleIntegerProperty { get; private set; }
+        #endregion
+
         #endregion
 
         public SimpleOptions(ILog logger, Dictionary<string, string> keyValue)

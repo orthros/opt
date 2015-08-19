@@ -41,6 +41,7 @@
   <ItemGroup>
     <Compile Include="Attributes\BoolOptionAttribute.cs" />
     <Compile Include="Attributes\EnumOptionAttribute.cs" />
+    <Compile Include="Attributes\IntegerOptionAttribute.cs" />
     <Compile Include="Attributes\OptionAttribute.cs" />
     <Compile Include="Attributes\StringOptionAttribute.cs" />
     <Compile Include="OptionSet.cs" />
