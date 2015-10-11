@@ -160,5 +160,22 @@ namespace Opt.Options
 
             #endregion
         }
+
+        public Dictionary<string,string> CreateDictionary()
+        {
+            Dictionary<string, string> returnValue = new Dictionary<string, string>();
+
+            var properties = from p in  this.GetType().GetProperties()
+                             let attr = p.GetCustomAttributes(typeof(OptionAttribute), true)
+                             where attr.Length != 0
+                             select new { Property = p, Attribute = attr.First() as OptionAttribute };
+ 
+            foreach(var prop in properties)
+            {
+                returnValue.Add(prop.Attribute.OptionName, prop.Property.GetValue(this).ToString());
+            }
+            
+            return returnValue;
+        }
     }
 }
