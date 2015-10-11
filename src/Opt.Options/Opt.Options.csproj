@@ -46,6 +46,7 @@
     <Compile Include="Attributes\StringOptionAttribute.cs" />
     <Compile Include="OptionSet.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="PropertyOption.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Opt.Core\Opt.Core.csproj">

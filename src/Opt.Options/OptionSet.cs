@@ -1,8 +1,8 @@
-﻿using Opt.Core;
-using Opt.Options.Attributes;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Opt.Core;
+using Opt.Options.Attributes;
 
 namespace Opt.Options
 {
@@ -17,15 +17,15 @@ namespace Opt.Options
         /// Provides logging functionality
         /// </summary>
         protected ILog Logger { get; private set; }
-                
-        
+
+
         /// <summary>
         /// Constructor for the OptionSet
         /// Parses the Options out of the dictionary
         /// </summary>
         /// <param name="log">The log for the OptionSet to use</param>
         /// <param name="keyValues">The set of Options represented as strings</param>
-        public OptionSet(ILog log, Dictionary<string,string> keyValues)
+        public OptionSet(ILog log, Dictionary<string, string> keyValues)
         {
             this.Logger = log;
             InitializeProperties(keyValues);
@@ -37,13 +37,10 @@ namespace Opt.Options
         /// Uses the <see cref="OptionAttribute"/>'s Name property as a key in <paramref name="keyValues"/> Dictionary
         /// </summary>
         /// <param name="keyValues">The Keys and Values of the Options</param>
-        private void InitializeProperties(Dictionary<string,string> keyValues)
+        private void InitializeProperties(Dictionary<string, string> keyValues)
         {
             #region Bools
-            var boolPropertiesThatAreOptions = from p in this.GetType().GetProperties()
-                                                     let attr = p.GetCustomAttributes(typeof(BoolOptionAttribute), true)
-                                                     where attr.Length != 0
-                                                     select new { Property = p, Attribute = attr.First() as BoolOptionAttribute };
+            var boolPropertiesThatAreOptions = GetPropertiesWithAttribute<BoolOptionAttribute>();
 
             foreach (var val in boolPropertiesThatAreOptions)
             {
@@ -65,10 +62,7 @@ namespace Opt.Options
             #endregion
 
             #region Enums
-            var enumPropertiesThatAreOptions = from p in this.GetType().GetProperties()
-                                                     let attr = p.GetCustomAttributes(typeof(EnumOptionAttribute), true)
-                                                     where attr.Length != 0
-                                                     select new { Property = p, Attribute = attr.First() as EnumOptionAttribute };
+            var enumPropertiesThatAreOptions = GetPropertiesWithAttribute<EnumOptionAttribute>();
 
             foreach (var val in enumPropertiesThatAreOptions)
             {
@@ -92,10 +86,7 @@ namespace Opt.Options
             #endregion
 
             #region Strings
-            var stringPropertiesThatAreOptions = from p in this.GetType().GetProperties()
-                                                       let attr = p.GetCustomAttributes(typeof(StringOptionAttribute), true)
-                                                       where attr.Length != 0
-                                                       select new { Property = p, Attribute = attr.First() as StringOptionAttribute };
+            var stringPropertiesThatAreOptions = GetPropertiesWithAttribute<StringOptionAttribute>();
 
             foreach (var val in stringPropertiesThatAreOptions)
             {
@@ -116,10 +107,7 @@ namespace Opt.Options
             #endregion
 
             #region Integerss
-            var integerPropertiesThatAreOptions = from p in this.GetType().GetProperties()
-                                                    let attr = p.GetCustomAttributes(typeof(IntegerOptionAttribute), true)
-                                                    where attr.Length != 0
-                                                    select new { Property = p, Attribute = attr.First() as IntegerOptionAttribute };
+            var integerPropertiesThatAreOptions = GetPropertiesWithAttribute<IntegerOptionAttribute>();
 
             foreach (var val in integerPropertiesThatAreOptions)
             {
@@ -127,7 +115,7 @@ namespace Opt.Options
                 {
                     var stringVal = keyValues[val.Attribute.OptionName];
                     var integerValue = val.Attribute.DefaultIntegerValue;
-                    if(!int.TryParse(stringVal, out integerValue))
+                    if (!int.TryParse(stringVal, out integerValue))
                     {
                         integerValue = val.Attribute.DefaultIntegerValue;
                     }
@@ -147,12 +135,16 @@ namespace Opt.Options
             #region Check for unknowns
             var unknownKVP = keyValues
                 .Select(x => x.Key)
-                .Except(stringPropertiesThatAreOptions.Select(x => x.Attribute.OptionName))
-                .Except(boolPropertiesThatAreOptions.Select(x => x.Attribute.OptionName))
-                .Except(enumPropertiesThatAreOptions.Select(x => x.Attribute.OptionName))
-                .Except(integerPropertiesThatAreOptions.Select(x => x.Attribute.OptionName));
+                .Except(stringPropertiesThatAreOptions
+                        .Select(x => x.Attribute.OptionName))
+                .Except(boolPropertiesThatAreOptions
+                        .Select(x => x.Attribute.OptionName))
+                .Except(enumPropertiesThatAreOptions
+                        .Select(x => x.Attribute.OptionName))
+                .Except(integerPropertiesThatAreOptions
+                        .Select(x => x.Attribute.OptionName));
 
-            if(unknownKVP.Any())
+            if (unknownKVP.Any())
             {
                 Logger.Log("The following Options were not found:\n\t");
                 Logger.Log(string.Join("\n\t", unknownKVP));
@@ -161,21 +153,23 @@ namespace Opt.Options
             #endregion
         }
 
-        public Dictionary<string,string> CreateDictionary()
+        public Dictionary<string, string> CreateDictionary()
         {
-            Dictionary<string, string> returnValue = new Dictionary<string, string>();
-
-            var properties = from p in  this.GetType().GetProperties()
-                             let attr = p.GetCustomAttributes(typeof(OptionAttribute), true)
-                             where attr.Length != 0
-                             select new { Property = p, Attribute = attr.First() as OptionAttribute };
- 
-            foreach(var prop in properties)
-            {
-                returnValue.Add(prop.Attribute.OptionName, prop.Property.GetValue(this).ToString());
-            }
-            
-            return returnValue;
+            return GetPropertiesWithAttribute<OptionAttribute>()
+                .ToDictionary(
+                    x => x.Attribute.OptionName, 
+                    x => x.Property.GetValue(this).ToString()
+                    );
         }
-    }
+
+        private IEnumerable<PropertyOption<T>> GetPropertiesWithAttribute<T>() where T : OptionAttribute
+        {
+            var props = from p in this.GetType().GetProperties()
+                        let attr = p.GetCustomAttributes(typeof(T), true)
+                        where attr.Length != 0
+                        select new PropertyOption<T>(p, attr.First() as T);
+
+            return props;
+        }
+    }    
 }
