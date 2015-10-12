@@ -82,7 +82,6 @@ namespace Opt.Options
                     val.Property.SetValue(this, enumValue, null);
                 }
             }
-
             #endregion
 
             #region Strings
