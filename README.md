@@ -10,7 +10,12 @@ added from a passed dictionary.
 Applications for this can be as simple as a console utility to a simulator that
 needs a static set of options to influence the decision tree.
 
-Supported types are Bool, Enum and String.
+Supported types are:
+ * Bool
+ * Enum
+ * String
+ * Integer
+
 Each Option has a "Name" field, which will be used in the dictionary lookup
 
 #Examples
