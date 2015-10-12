@@ -9,7 +9,14 @@ namespace Opt.Options
     /// <typeparam name="T">The type to use. Must inherit from OptionAttribute</typeparam>
     internal class PropertyOption<T> where T : OptionAttribute
     {
+        /// <summary>
+        /// The property that represents an option
+        /// </summary>
         public PropertyInfo Property { get; private set; }
+        
+        /// <summary>
+        /// The Attibute that describes the option
+        /// </summary>
         public T Attribute { get; private set; }
 
         public PropertyOption(PropertyInfo propinfo, T attributeInfo)
