@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Opt.Core;
 using Opt.Options.Attributes;
+using Orth.Core.Logs;
+using Orth.Core.Utils;
 
 namespace Opt.Options
 {
@@ -47,7 +48,7 @@ namespace Opt.Options
                 if (keyValues.ContainsKey(val.Attribute.OptionName))
                 {
                     var stringVal = keyValues[val.Attribute.OptionName];
-                    var boolVal = Utils.parseYesNoTrueFalse(stringVal, val.Attribute.DefaultValue);
+                    var boolVal = Utilities.ParseTrueFalse(stringVal, val.Attribute.DefaultValue);
                     val.Property.SetValue(this, boolVal, null);
                 }
                 else

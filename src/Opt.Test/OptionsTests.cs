@@ -1,14 +1,13 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Opt.Tests.Stubs;
+﻿using Opt.Tests.Stubs;
 using System;
 using System.Collections.Generic;
+using Xunit;
 
 namespace Opt.Tests
-{
-    [TestClass]
+{    
     public class OptionsTests
     {
-        [TestMethod]
+        [Fact]
         public void UnknownOptions()
         {
             StorageLogger logger = new StorageLogger();
@@ -20,10 +19,10 @@ namespace Opt.Tests
 
             SimpleOptions so = new SimpleOptions(logger, testDictionary);
 
-            Assert.IsTrue(logger.CachedLogs.Contains(g.ToString()));
+            Assert.True(logger.CachedLogs.Contains(g.ToString()));
         }
 
-        [TestMethod]
+        [Fact]
         public void KnownOptions()
         {
             StorageLogger logger = new StorageLogger();
@@ -43,14 +42,14 @@ namespace Opt.Tests
 
             SimpleOptions so = new SimpleOptions(logger, testDictionary);
 
-            Assert.IsTrue(so.SimpleStringFeature.Equals(MyStringExpectedValue));
-            Assert.IsTrue(so.SimpleEnumFeature == EnumFeatureExpectedValue);
-            Assert.IsTrue(so.FeatureOneIsOn == Feature1ExpectedValue);
-            Assert.IsTrue(so.FeatureTwoIsOn == Feature2ExpectedValue);
-            Assert.IsTrue(so.SimpleIntegerProperty == SimpleIntegerExpectedValue);
+            Assert.True(so.SimpleStringFeature.Equals(MyStringExpectedValue));
+            Assert.True(so.SimpleEnumFeature == EnumFeatureExpectedValue);
+            Assert.True(so.FeatureOneIsOn == Feature1ExpectedValue);
+            Assert.True(so.FeatureTwoIsOn == Feature2ExpectedValue);
+            Assert.True(so.SimpleIntegerProperty == SimpleIntegerExpectedValue);
         }
 
-        [TestMethod]
+        [Fact]
         public void DictionaryTest()
         {
             StorageLogger logger = new StorageLogger();
@@ -75,22 +74,16 @@ namespace Opt.Tests
 
             foreach(var kvp in testDictionary)
             {
-                if (!dictionaryToTest.ContainsKey(kvp.Key))
-                {
-                    Assert.Fail(string.Format("The resultant dictionary does not contain the key: {0}", kvp.Key));
-                }
-                Assert.AreEqual(kvp.Value, testDictionary[kvp.Key],
-                    string.Format("The expected value {0} did not match the resultant value {1}",
-                        kvp.Value,
-                        testDictionary[kvp.Key]));
+                Assert.True(dictionaryToTest.ContainsKey(kvp.Key),
+                    string.Format("The resultant dictionary does not contain the key: {0}", kvp.Key));
+
+                Assert.Equal(kvp.Value, testDictionary[kvp.Key]);
             }
 
-            foreach(var kvp in dictionaryToTest)
+            foreach (var kvp in dictionaryToTest)
             {
-                if(!testDictionary.ContainsKey(kvp.Key))
-                {
-                    Assert.Fail(string.Format("The resultant dicitonary had an unexpected key: {0}",kvp.Key));
-                }
+                Assert.True(dictionaryToTest.ContainsKey(kvp.Key),
+                    string.Format("The resultant dicitonary had an unexpected key: {0}", kvp.Key));
             }
         }
     }

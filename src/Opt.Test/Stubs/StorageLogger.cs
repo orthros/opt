@@ -1,4 +1,4 @@
-﻿using Opt.Core;
+﻿using Orth.Core.Logs;
 using System.Collections.Generic;
 
 namespace Opt.Tests.Stubs
