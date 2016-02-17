@@ -28,6 +28,11 @@ namespace Opt.Options
         /// <param name="keyValues">The set of Options represented as strings</param>
         public OptionSet(ILog log, Dictionary<string, string> keyValues)
         {
+            if(log == null)
+            {
+                throw new ArgumentNullException("log");
+            }
+
             this.Logger = log;
             InitializeProperties(keyValues);
         }
@@ -40,6 +45,11 @@ namespace Opt.Options
         /// <param name="keyValues">The Keys and Values of the Options</param>
         private void InitializeProperties(Dictionary<string, string> keyValues)
         {
+            if(keyValues == null)
+            {
+                throw new ArgumentNullException("keyValues");
+            }
+
             #region Bools
             var boolPropertiesThatAreOptions = GetPropertiesWithAttribute<BoolOptionAttribute>();
 

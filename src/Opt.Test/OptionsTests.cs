@@ -1,4 +1,5 @@
 ﻿using Opt.Tests.Stubs;
+using Orth.Core.Logs;
 using System;
 using System.Collections.Generic;
 using Xunit;
@@ -48,6 +49,36 @@ namespace Opt.Tests
             Assert.True(so.FeatureTwoIsOn == Feature2ExpectedValue);
             Assert.True(so.SimpleIntegerProperty == SimpleIntegerExpectedValue);
         }
+
+        [Fact]
+        public void NullOptions()
+        {
+            StorageLogger logger = new StorageLogger();
+            Assert.Throws(typeof(ArgumentNullException), () =>
+             {
+                 SimpleOptions so = new SimpleOptions(logger, null);
+             });
+        }
+
+        [Fact]
+        public void NullLog()
+        {
+            Dictionary<string, string> emptyDict = new Dictionary<string, string>();
+            Assert.Throws(typeof(ArgumentNullException), () =>
+             {
+                 SimpleOptions so = new SimpleOptions(null, emptyDict);
+             });
+        }
+
+        [Fact]
+        public void NullBoth()
+        {
+            Assert.Throws(typeof(ArgumentNullException), () =>
+            {
+                SimpleOptions so = new SimpleOptions(null, null);
+            });
+        }
+
 
         [Fact]
         public void DictionaryTest()
