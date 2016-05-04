@@ -1,6 +1,5 @@
 ﻿using Opt.Options;
 using Opt.Options.Attributes;
-using Orth.Core.Logs;
 using System.Collections.Generic;
 
 namespace Opt.Tests.Stubs
@@ -33,8 +32,8 @@ namespace Opt.Tests.Stubs
 
         #endregion
 
-        public SimpleOptions(ILog logger, Dictionary<string, string> keyValue)
-            : base(logger, keyValue)
+        public SimpleOptions(Dictionary<string, string> keyValue)
+            : base(keyValue)
         {
 
         }

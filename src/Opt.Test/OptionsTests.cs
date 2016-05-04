@@ -1,8 +1,10 @@
-﻿using Opt.Tests.Stubs;
-using Orth.Core.Logs;
+﻿using log4net.Appender;
+using log4net.Config;
+using Opt.Tests.Stubs;
 using System;
 using System.Collections.Generic;
 using Xunit;
+using System.Linq;
 
 namespace Opt.Tests
 {    
@@ -11,22 +13,23 @@ namespace Opt.Tests
         [Fact]
         public void UnknownOptions()
         {
-            StorageLogger logger = new StorageLogger();
+            var memoryAppender = new MemoryAppender();
+            BasicConfigurator.Configure(memoryAppender);
+
             Dictionary<string, string> testDictionary = new Dictionary<string, string>();
 
             Guid g = Guid.NewGuid();
             testDictionary.Add(g.ToString(), g.ToString());
             testDictionary.Add("MyString", "&");
 
-            SimpleOptions so = new SimpleOptions(logger, testDictionary);
+            SimpleOptions so = new SimpleOptions(testDictionary);
 
-            Assert.True(logger.CachedLogs.Contains(g.ToString()));
+            Assert.True(memoryAppender.GetEvents()[5].RenderedMessage.Equals(g.ToString()));
         }
 
         [Fact]
         public void KnownOptions()
         {
-            StorageLogger logger = new StorageLogger();
             Dictionary<string, string> testDictionary = new Dictionary<string, string>();
 
             string MyStringExpectedValue = "&";
@@ -41,7 +44,7 @@ namespace Opt.Tests
             testDictionary.Add("Feat2",Feature2ExpectedValue.ToString());
             testDictionary.Add("MyInt", SimpleIntegerExpectedValue.ToString());
 
-            SimpleOptions so = new SimpleOptions(logger, testDictionary);
+            SimpleOptions so = new SimpleOptions(testDictionary);
 
             Assert.True(so.SimpleStringFeature.Equals(MyStringExpectedValue));
             Assert.True(so.SimpleEnumFeature == EnumFeatureExpectedValue);
@@ -53,29 +56,18 @@ namespace Opt.Tests
         [Fact]
         public void NullOptions()
         {
-            StorageLogger logger = new StorageLogger();
             Assert.Throws(typeof(ArgumentNullException), () =>
              {
-                 SimpleOptions so = new SimpleOptions(logger, null);
+                 SimpleOptions so = new SimpleOptions(null);
              });
         }
-
-        [Fact]
-        public void NullLog()
-        {
-            Dictionary<string, string> emptyDict = new Dictionary<string, string>();
-            Assert.Throws(typeof(ArgumentNullException), () =>
-             {
-                 SimpleOptions so = new SimpleOptions(null, emptyDict);
-             });
-        }
-
+                
         [Fact]
         public void NullBoth()
         {
             Assert.Throws(typeof(ArgumentNullException), () =>
             {
-                SimpleOptions so = new SimpleOptions(null, null);
+                SimpleOptions so = new SimpleOptions(null);
             });
         }
 
@@ -83,8 +75,6 @@ namespace Opt.Tests
         [Fact]
         public void DictionaryTest()
         {
-            StorageLogger logger = new StorageLogger();
-
             Dictionary<string, string> testDictionary = new Dictionary<string, string>();
 
             string MyStringExpectedValue = "&";
@@ -99,7 +89,7 @@ namespace Opt.Tests
             testDictionary.Add("Feat2", Feature2ExpectedValue.ToString());
             testDictionary.Add("MyInt", SimpleIntegerExpectedValue.ToString());
 
-            SimpleOptions so = new SimpleOptions(logger, testDictionary);
+            SimpleOptions so = new SimpleOptions(testDictionary);
             
             var dictionaryToTest = so.CreateDictionary();
 

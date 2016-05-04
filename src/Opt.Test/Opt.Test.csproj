@@ -33,6 +33,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="log4net, Version=1.2.15.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
+      <HintPath>..\packages\log4net.2.0.5\lib\net45-full\log4net.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="orth.core">
       <HintPath>..\..\lib\orth.core.dll</HintPath>
     </Reference>
@@ -66,7 +70,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Stubs\SimpleEnum.cs" />
     <Compile Include="Stubs\SimpleOptions.cs" />
-    <Compile Include="Stubs\StorageLogger.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

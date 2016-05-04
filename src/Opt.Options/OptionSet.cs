@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using Opt.Options.Attributes;
-using Orth.Core.Logs;
+
 using Orth.Core.Utils;
+using log4net;
 
 namespace Opt.Options
 {
@@ -17,7 +18,7 @@ namespace Opt.Options
         /// <summary>
         /// Provides logging functionality
         /// </summary>
-        protected ILog Logger { get; private set; }
+        protected static readonly ILog Logger = LogManager.GetLogger(typeof(OptionSet));
 
 
         /// <summary>
@@ -26,14 +27,8 @@ namespace Opt.Options
         /// </summary>
         /// <param name="log">The log for the OptionSet to use</param>
         /// <param name="keyValues">The set of Options represented as strings</param>
-        public OptionSet(ILog log, Dictionary<string, string> keyValues)
+        public OptionSet(Dictionary<string, string> keyValues)
         {
-            if(log == null)
-            {
-                throw new ArgumentNullException("log");
-            }
-
-            this.Logger = log;
             InitializeProperties(keyValues);
         }
 
@@ -64,8 +59,8 @@ namespace Opt.Options
                 else
                 {
                     //Warn
-                    Logger.Log(string.Format("Could not find Option {0}. Setting it to the default value \"{1}\"",
-                        val.Property.Name, val.Attribute.DefaultValue));
+                    Logger.WarnFormat("Could not find Option {0}. Setting it to the default value \"{1}\"",
+                        val.Property.Name, val.Attribute.DefaultValue);
                     //Set
                     val.Property.SetValue(this, val.Attribute.DefaultValue, null);
                 }
@@ -87,8 +82,8 @@ namespace Opt.Options
                 {
                     //Warn
                     var enumValue = Enum.Parse(val.Attribute.EnumType, val.Attribute.DefaultValue.ToString());
-                    Logger.Log(string.Format("Could not find Option {0}. Setting it to the default value \"{1}\"",
-                        val.Property.Name, enumValue));
+                    Logger.WarnFormat("Could not find Option {0}. Setting it to the default value \"{1}\"",
+                        val.Property.Name, enumValue);
                     //Set
                     val.Property.SetValue(this, enumValue, null);
                 }
@@ -108,8 +103,8 @@ namespace Opt.Options
                 else
                 {
                     //Warn
-                    Logger.Log(string.Format("Could not find Option \"{0}\". Setting it to the default value \"{1}\"",
-                        val.Property.Name, val.Attribute.DefaultStringValue));
+                    Logger.WarnFormat("Could not find Option \"{0}\". Setting it to the default value \"{1}\"",
+                        val.Property.Name, val.Attribute.DefaultStringValue);
                     //Set
                     val.Property.SetValue(this, val.Attribute.DefaultStringValue, null);
                 }
@@ -134,8 +129,8 @@ namespace Opt.Options
                 else
                 {
                     //Warn
-                    Logger.Log(string.Format("Could not find Option \"{0}\". Setting it to the default value \"{1}\"",
-                        val.Property.Name, val.Attribute.DefaultIntegerValue));
+                    Logger.WarnFormat("Could not find Option \"{0}\". Setting it to the default value \"{1}\"",
+                        val.Property.Name, val.Attribute.DefaultIntegerValue);
                     //Set
                     val.Property.SetValue(this, val.Attribute.DefaultIntegerValue, null);
                 }
@@ -156,8 +151,8 @@ namespace Opt.Options
 
             if (unknownKVP.Any())
             {
-                Logger.Log("The following Options were not found:\n\t");
-                Logger.Log(string.Join("\n\t", unknownKVP));
+                Logger.Warn("The following Options were not found:\n\t");
+                Logger.Warn(string.Join("\n\t", unknownKVP));
             }
 
             #endregion
